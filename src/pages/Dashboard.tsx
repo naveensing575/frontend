@@ -13,8 +13,8 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const fetchDataRecords = async () => {
       if (activeTab === "dataRecords") {
-        const data = await getDataRecords();
-        setDataRecords(data);
+        const response = await getDataRecords(); // Fetch data
+        setDataRecords(response.dataRecords || []); // Use the correct key and fallback to empty array
       }
     };
     fetchDataRecords();

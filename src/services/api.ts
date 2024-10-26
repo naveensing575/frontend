@@ -23,9 +23,9 @@ export const setupInterceptors = (
     (response) => response,
     (error) => {
       if (error.response?.status === 403) {
-        localStorage.removeItem("token"); // Clear token
-        setMessage("Your session has expired. Please log in again."); // Show notification
-        logout(); // Log out user and redirect
+        localStorage.removeItem("token");
+        setMessage("Your session has expired. Please log in again.");
+        logout();
       }
       return Promise.reject(error);
     }
@@ -54,6 +54,11 @@ export const loginUser = async (email: string, password: string) => {
 
 export const getRoles = async () => {
   const response = await api.get("/roles");
+  return response.data;
+};
+
+export const getDataRecords = async (filter: any = {}) => {
+  const response = await api.get("/data-records", { params: filter });
   return response.data;
 };
 

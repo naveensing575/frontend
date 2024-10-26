@@ -117,3 +117,58 @@
   font-weight: bold;
   color: #555;
 }
+
+/* data-records styles */
+
+.data-record-table {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.data-record-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensures columns have fixed widths */
+}
+
+.data-record-table th,
+.data-record-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.data-record-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.data-record-table td {
+  background-color: #fff;
+}
+
+.data-record-table tr:nth-child(even) td {
+  background-color: #f9f9f9;
+}
+
+/* Set fixed widths for each column */
+.data-record-table th:nth-child(1),
+.data-record-table td:nth-child(1) {
+  width: 10%; /* ID column */
+}
+
+.data-record-table th:nth-child(2),
+.data-record-table td:nth-child(2) {
+  width: 35%; /* Timestamp column */
+}
+
+.data-record-table th:nth-child(3),
+.data-record-table td:nth-child(3) {
+  width: 25%; /* Location column */
+}
+
+.data-record-table th:nth-child(4),
+.data-record-table td:nth-child(4) {
+  width: 20%; /* Amount column */
+}

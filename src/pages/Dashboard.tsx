@@ -1,31 +1,24 @@
+// src/pages/Dashboard.tsx
 import React, { useEffect, useState } from "react";
-import { getMetrics } from "../services/api";
+import { getDataRecords } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import DataUpload from "./DataUpload";
+import DataRecordTable from "../components/DataRecordTable";
 
 const Dashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [dataRecords, setDataRecords] = useState<any[]>([]);
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState<string>("metrics");
+  const [activeTab, setActiveTab] = useState<string>("dataRecords");
 
   useEffect(() => {
-    const fetchMetrics = async () => {
-      const data = await getMetrics();
-      setMetrics(data);
+    const fetchDataRecords = async () => {
+      if (activeTab === "dataRecords") {
+        const data = await getDataRecords();
+        setDataRecords(data);
+      }
     };
-    fetchMetrics();
-  }, []);
-
-  const renderMetrics = () => (
-    <div className="metrics-section">
-      {metrics.map((metric) => (
-        <div key={metric.id} className="metric-card">
-          <h4>{metric.name}</h4>
-          <p>{metric.value}</p>
-        </div>
-      ))}
-    </div>
-  );
+    fetchDataRecords();
+  }, [activeTab]);
 
   return (
     <div className="dashboard">
@@ -38,10 +31,12 @@ const Dashboard: React.FC = () => {
 
       <div className="tabs">
         <button
-          className={`tab-button ${activeTab === "metrics" ? "active" : ""}`}
-          onClick={() => setActiveTab("metrics")}
+          className={`tab-button ${
+            activeTab === "dataRecords" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("dataRecords")}
         >
-          Metrics
+          Data Records
         </button>
         <button
           className={`tab-button ${activeTab === "upload" ? "active" : ""}`}
@@ -52,10 +47,13 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="tab-content">
-        {activeTab === "metrics" && (
+        {activeTab === "dataRecords" && (
           <>
-            <h3>Dashboard Metrics</h3>
-            {renderMetrics()}
+            <h3>Data Records</h3>
+            <DataRecordTable
+              dataRecords={dataRecords}
+              setDataRecords={setDataRecords}
+            />
           </>
         )}
         {activeTab === "upload" && (

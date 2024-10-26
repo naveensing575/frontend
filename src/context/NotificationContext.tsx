@@ -1,5 +1,11 @@
 // src/context/NotificationContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface NotificationContextProps {
   message: string | null;
@@ -14,11 +20,32 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [message, setMessage] = useState<string | null>(null);
+  const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (message) {
+      setVisible(true);
+
+      // Set a timeout to clear the message after 5 seconds if not canceled
+      const timer = setTimeout(() => {
+        setVisible(false);
+        setMessage(null);
+      }, 5000);
+
+      // Clear the timer if the component unmounts or if the message changes
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const handleCancel = () => {
+    setVisible(false);
+    setMessage(null); // Clear the message when "Cancel" is clicked
+  };
 
   return (
     <NotificationContext.Provider value={{ message, setMessage }}>
       {children}
-      {message && (
+      {visible && message && (
         <div
           style={{
             position: "fixed",
@@ -28,9 +55,24 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
             color: "#fff",
             padding: "10px",
             borderRadius: "5px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
           }}
         >
-          {message}
+          <span>{message}</span>
+          <button
+            onClick={handleCancel}
+            style={{
+              backgroundColor: "transparent",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
+            Cancel
+          </button>
         </div>
       )}
     </NotificationContext.Provider>

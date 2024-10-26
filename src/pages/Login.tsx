@@ -12,7 +12,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/dashboard"); // Redirect to dashboard after successful login
+      navigate("/dashboard"); 
     } catch (error) {
       alert("Login failed. Please check your credentials.");
     }

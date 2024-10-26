@@ -1,4 +1,3 @@
-// src/components/DataRecordTable.tsx
 import React, { useState } from "react";
 import { getDataRecords } from "../services/api";
 
@@ -27,6 +26,12 @@ const DataRecordTable: React.FC<DataRecordTableProps> = ({
     setDataRecords(filteredData);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="data-record-table">
       <div className="filters">
@@ -34,15 +39,21 @@ const DataRecordTable: React.FC<DataRecordTableProps> = ({
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="Select Date"
+          className="filter-input"
         />
         <input
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
+          onKeyPress={handleKeyPress}
           placeholder="Enter Location"
+          className="filter-input"
         />
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch} className="search-button">
+          Search
+        </button>
       </div>
 
       <table>

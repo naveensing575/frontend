@@ -1,6 +1,5 @@
 // src/services/api.ts
 import axios from "axios";
-import { useNotification } from "../context/NotificationContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,18 +15,22 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 403) {
-      const notification = useNotification();
-      localStorage.removeItem("token");
-      notification.setMessage("Your session has expired. Please log in again.");
-      window.location.href = "/";
+export const setupInterceptors = (
+  logout: () => void,
+  setMessage: (msg: string) => void
+) => {
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 403) {
+        localStorage.removeItem("token"); // Clear token
+        setMessage("Your session has expired. Please log in again."); // Show notification
+        logout(); // Log out user and redirect
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+};
 
 export const registerUser = async (
   name: string,

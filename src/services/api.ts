@@ -22,9 +22,31 @@ export const setupInterceptors = (
   api.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 403) {
-        localStorage.removeItem("token");
-        setMessage("Your session has expired. Please log in again.");
+      if (error.response) {
+        const status = error.response.status;
+        switch (status) {
+          case 403:
+            localStorage.removeItem("token");
+            setMessage("Your session has expired. Please log in again.");
+            logout();
+            break;
+          case 404:
+            setMessage("Requested resource not found.");
+            logout();
+            break;
+          case 500:
+            setMessage(
+              "An error occurred on the server. Please try again later."
+            );
+            logout();
+            break;
+          default:
+            setMessage("An unexpected error occurred. Please try again.");
+            logout();
+            break;
+        }
+      } else {
+        setMessage("Network error. Please check your connection.");
         logout();
       }
       return Promise.reject(error);

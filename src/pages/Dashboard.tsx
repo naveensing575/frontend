@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getMetrics } from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import DataUpload from "./DataUpload";
 
 const Dashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<any[]>([]);
@@ -35,6 +36,7 @@ const Dashboard: React.FC = () => {
           </div>
         ))}
       </div>
+      <DataUpload />
     </div>
   );
 };
